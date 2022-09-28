@@ -9,6 +9,8 @@ addBtn.addEventListener("click", function (e) {
 
   // get addTxt by it's ID
   let addTxt = document.getElementById("addTxt");
+  let addTitle = document.getElementById("addTitle");
+
 
   // Getting notes from the local storage
   let notes = localStorage.getItem("notes");
@@ -19,14 +21,19 @@ addBtn.addEventListener("click", function (e) {
   } else {
     notesObj = JSON.parse(notes);
   }
+  addObj = {
+    title: addTitle.value,
+    text: addTxt.value
+  }
   // pushing the value of the addTxt to the notesObj array
-  notesObj.push(addTxt.value);
+  notesObj.push(addObj);
 
   // setting and stringfying the notesObj to the localstorage
   localStorage.setItem("notes", JSON.stringify(notesObj));
 
   // setting the addtxt value to length 0, so that it doesn't remain there when the note is added.
   addTxt.value = "";
+  addTitle.value = "";
 
   //   console.log(notesObj);
 
@@ -54,8 +61,8 @@ function showNotes() {
     html += `
             <div class="noteCard my-2 mx-2 card" style="width: 18rem;background-color: cyan;">
                     <div class="card-body">
-                        <h5 class="card-title">Note ${index + 1}</h5>
-                        <p class="card-text"> ${element}</p>
+                        <h5 class="card-title">${element.title}</h5>
+                        <p class="card-text"> ${element.text}</p> 
                         <button id="${index}"onclick="deleteNote(this.id)" class="btn btn-success">Delete Note</button>
                     </div>
                 </div>`;
@@ -115,10 +122,10 @@ search.addEventListener("input", function () {
   Array.from(noteCards).forEach(function (element) {
 
     // Getting the text written in the card
-    let cardTxt = element.getElementsByTagName("p")[0].innerText;
+    let cardTitle = element.getElementsByTagName("h5")[0].innerText;
 
     // iterating the card for the cardTxt
-    if (cardTxt.includes(inputVal)) {
+    if (cardTitle.includes(inputVal)) {
       element.style.display = "block";
     }
     else {
@@ -129,8 +136,7 @@ search.addEventListener("input", function () {
 
 /*
 Further Features that can be added to my app are as follows which I may add in the near future:
-1. Add Title
 2. Mark a note as Important
 3. Separate notes by user
 4. Sync and host to web server 
-*/ 
+*/
